@@ -1,0 +1,8 @@
+[package]
+name = "tool_wasi_sdk"
+version = "0.1.0"
+edition = "2021"
+description = "Open-Cognitive OS için dış araçlar oluşturma kiti"
+
+[lib]
+crate-type = ["cdylib"]
