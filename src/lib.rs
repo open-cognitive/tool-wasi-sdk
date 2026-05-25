@@ -22,8 +22,23 @@ pub extern "C" fn process_text(ptr: *mut c_char) -> *mut c_char {
     unsafe {
         let c_str = CStr::from_ptr(ptr);
         let input_str = c_str.to_str().unwrap_or("");
-        
         let output_str = format!("(WASM MÜHÜRLÜ) İşlenen Metin: {}", input_str.to_uppercase());
         CString::new(output_str).unwrap().into_raw()
+    }
+}
+
+// YENİ ARAÇ: Dışarıdan gelen işletim sistemi verilerini alıp terminal raporu çizer.
+#[no_mangle]
+pub extern "C" fn generate_report(ptr: *mut c_char) -> *mut c_char {
+    unsafe {
+        let c_str = CStr::from_ptr(ptr);
+        let raw_data = c_str.to_str().unwrap_or("");
+        
+        let report = format!(
+            "\n╭─────────────────────────────────╮\n│ 🚀 OPEN-COGNITIVE SYSTEM REPORT │\n├─────────────────────────────────┤\n│ 💻 Ortam: {:<21} │\n│ 🛡️ Güvenlik: Aktif (WASM)       │\n│ 🧠 Biliş: Sistem 1 & 2 Devrede  │\n╰─────────────────────────────────╯", 
+            raw_data
+        );
+        
+        CString::new(report).unwrap().into_raw()
     }
 }
