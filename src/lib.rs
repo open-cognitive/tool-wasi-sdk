@@ -53,3 +53,16 @@ pub extern "C" fn format_file(ptr: *mut c_char) -> *mut c_char {
         CString::new(report).unwrap().into_raw()
     }
 }
+
+// YENİ ARAÇ: Host İşletim Sisteminden gelen ham tarih/saat verisini formatlar
+#[no_mangle]
+pub extern "C" fn format_time(ptr: *mut c_char) -> *mut c_char {
+    unsafe {
+        let c_str = CStr::from_ptr(ptr);
+        let time_data = c_str.to_str().unwrap_or("Zaman alınamadı");
+        
+        let report = format!("🕰️ İşletim Sistemi Saati: {}", time_data);
+        
+        CString::new(report).unwrap().into_raw()
+    }
+}
