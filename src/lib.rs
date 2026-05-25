@@ -5,9 +5,7 @@ use std::os::raw::c_char;
 use std::mem;
 
 #[no_mangle]
-pub extern "C" fn execute(input: i64) -> i64 {
-    input * input
-}
+pub extern "C" fn execute(input: i64) -> i64 { input * input }
 
 #[no_mangle]
 pub extern "C" fn alloc(size: usize) -> *mut u8 {
@@ -27,16 +25,29 @@ pub extern "C" fn process_text(ptr: *mut c_char) -> *mut c_char {
     }
 }
 
-// YENİ ARAÇ: Dışarıdan gelen işletim sistemi verilerini alıp terminal raporu çizer.
 #[no_mangle]
 pub extern "C" fn generate_report(ptr: *mut c_char) -> *mut c_char {
     unsafe {
         let c_str = CStr::from_ptr(ptr);
         let raw_data = c_str.to_str().unwrap_or("");
-        
         let report = format!(
             "\n╭─────────────────────────────────╮\n│ 🚀 OPEN-COGNITIVE SYSTEM REPORT │\n├─────────────────────────────────┤\n│ 💻 Ortam: {:<21} │\n│ 🛡️ Güvenlik: Aktif (WASM)       │\n│ 🧠 Biliş: Sistem 1 & 2 Devrede  │\n╰─────────────────────────────────╯", 
             raw_data
+        );
+        CString::new(report).unwrap().into_raw()
+    }
+}
+
+// YENİ ARAÇ: Host İşletim Sisteminden gelen ham dosya verisini güvenli UI'a çevirir
+#[no_mangle]
+pub extern "C" fn format_file(ptr: *mut c_char) -> *mut c_char {
+    unsafe {
+        let c_str = CStr::from_ptr(ptr);
+        let content = c_str.to_str().unwrap_or("HATA: İçerik alınamadı.");
+        
+        let report = format!(
+            "\n📄 DOSYA İÇERİĞİ (WASM Tarafından Denetlendi) 📄\n──────────────────────────────────────────────────\n{}\n──────────────────────────────────────────────────", 
+            content.trim()
         );
         
         CString::new(report).unwrap().into_raw()
